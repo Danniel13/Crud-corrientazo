@@ -1,0 +1,14 @@
+@startuml "Diagrama de clases"
+
+class Persona
+
+Class Mesa{
+  - String numero
+  + Integer Calculartotal
+}
+Mesa--Persona
+@enduml
+
+
+' Crear diagramma entidad relacion
+' Crear diagrama de clases
