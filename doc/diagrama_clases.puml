@@ -6,9 +6,35 @@ Class Mesa{
   - String numero
   + Integer Calculartotal
 }
-Mesa--Persona
+Mesa "1"-- "*" Pedido
+
+pedido .right.>EstadoPedido
+pedido .left- Adicional
+
+Pedido --OpcionPedido
+
+OpcionPedido <|-- AlmCompleto
+OpcionPedido <|-- Bandeja
+
+AlmCompleto --OpcionSopa
+AlmCompleto --OpcionPrincipio
+AlmCompleto --OpcionCarne
+AlmCompleto --OpcionEnsalada
+AlmCompleto --OpcionJugo
+
+
+Bandeja --OpcionPrincipio
+Bandeja --OpcionCarne
+Bandeja --OpcionEnsalada
+Bandeja --OpcionJugo
+
+
+
 @enduml
 
 
 ' Crear diagramma entidad relacion
 ' Crear diagrama de clases
+
+
+
