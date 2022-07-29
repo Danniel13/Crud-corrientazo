@@ -3,62 +3,56 @@ package com.dkdev.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-//TIENE UNA RELACION DE DEPENDENCIA CON ESTADO DE PEDIDO
 public class Pedido {
-  private String Cliente;
-  private Estadopedido estado;
-  private List<Adicional> adicionales;
-  private Opcionpedido opcion;
+    private String cliente;
+    private Estadopedido estado;
+    private List<Adicional> adicionales;
+    private Opcionpedido opcion;
 
-public Pedido(String cliente){
-  this.Cliente = cliente;
-  this.estado= Estadopedido.PENDIENTE_ENTREGAR;
-  this.adicionales = new ArrayList<>();
+    public Pedido(String cliente) {
+        this.cliente = cliente;
+
+        this.estado = Estadopedido.PENDIENTE_ENTREGAR;
+        this.adicionales = new ArrayList<>();
+    }
+
+    public Pedido(String cliente, Opcionpedido opcion) {
+        this.cliente = cliente;
+        this.opcion = opcion;
+
+        this.estado = Estadopedido.PENDIENTE_ENTREGAR;
+        this.adicionales = new ArrayList<>();
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public Estadopedido getEstado() {
+        return estado;
+    }
+
+    public Opcionpedido getOpcion() {
+        return opcion;
+    }
+
+    public void setOpcion(Opcionpedido opcion) {
+        this.opcion = opcion;
+    }
+
+    public void entregar() {
+        this.estado = Estadopedido.PENDIENTE_COBRAR;
+    }
+
+    public void agregarAdicional(Adicional adicional) {
+        this.adicionales.add(adicional);
+    }
+
+    public Integer calcularTotal() {
+        return opcion.getPrecio()
+                + adicionales.stream()
+                        .map(a -> a.getPrecio())
+                        .reduce((a, b) -> a + b)
+                        .orElse(0);
+    }
 }
-
-public Pedido(String cliente, Opcionpedido opcion){
-  this.Cliente = cliente;
-  this.opcion = opcion;
-  this.estado = Estadopedido.PENDIENTE_ENTREGAR;
-  this.adicionales = new ArrayList<>();
-
-}
-
-
-
-  public String getcliente(){
-    return Cliente;
-
-
-  }
-
-
-
-  public Opcionpedido getOpcion() {
-    return opcion;
-  }
-
-
-
-  public void Entregar() {
-    this.estado =Estadopedido.PENDIENTE_COBRAR;
-
-  }
-
-
-
-  public void agregarAdicional(Adicional adicional){
-    this.adicionales.add(adicional);
-  }
-
-
-  public Integer CalcularTotal () {
-    return opcion.getPrecio()
-    + adicionales.stream()
-    .map(a->a.getPrecio())
-    .reduce((a, b)->a+b)
-    .orElse(0);
-  }
-}
-
-

@@ -5,7 +5,7 @@ import javax.swing.undo.CannotRedoException;
 public abstract class Opcionpedido {
   
 
-  private Integer Precio;
+  private Integer precio;
 
   private OpcionPrincipio principio;
   private OpcionCarne carne;
@@ -15,35 +15,36 @@ public abstract class Opcionpedido {
 
   //CONSTRUCTOR
   public Opcionpedido(Integer precio) {
-    Precio = precio;
+    this.precio = precio;
   }
 
 
 
 
-  public Opcionpedido(OpcionPrincipio principio, OpcionCarne carne, OpcionEnsalada ensalada, OpcionJugo jugo) {
-    this.Precio = Precio;
-    this.principio = principio;
-    this.carne = carne;
-    this.ensalada = ensalada;
-    this.jugo = jugo;
-  }
+  public Opcionpedido(Integer precio, OpcionPrincipio principio, OpcionCarne carne, OpcionEnsalada ensalada,
+  OpcionJugo jugo) {
+  this.precio = precio;
+  this.principio = principio;
+  this.carne = carne;
+  this.ensalada = ensalada;
+  this.jugo = jugo;
+}
 
 
 //SIN ENSALADA
 
-  public Opcionpedido(OpcionPrincipio principio, OpcionCarne carne, OpcionJugo jugo) {
-    this.Precio = Precio;
-    this.principio = principio;
-    this.carne = carne;
-    this.jugo = jugo;
-  }
+  public Opcionpedido(Integer precio, OpcionPrincipio principio, OpcionCarne carne, OpcionJugo jugo) {
+  this.precio = precio;
+  this.principio = principio;
+  this.carne = carne;
+  this.jugo = jugo;
+}
 
 
 
 
   public Integer getPrecio() {
-    return Precio;
+    return precio;
   }
 
 

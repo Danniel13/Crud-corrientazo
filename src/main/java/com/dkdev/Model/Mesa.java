@@ -3,64 +3,47 @@ package com.dkdev.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dkdev.exceptions.EfectivoInsuficienteException;
+
+
 public class Mesa {
-  private String numero;
-  private List<Pedido> pedidos; //Creacion array de relación una mesa  amuychos pedidos
+    private String numero;
+    private List<Pedido> pedidos;
 
+    public Mesa(String numero) {
+        this.numero = numero;
 
-  //METODOS:
-
-  public Integer CalcularValorPagar() {
-    return pedidos.stream()
-    .filter(p->p.getEstado() ==Estadopedido.PENDIENTE_COBRAR)
-    .map(p->p.CalcularTotal())
-    .reduce((a, b) ->a+b)
-    .orElse(0);
-
-
-
-
-  }
-
-  public Integer Pagar(Integer Efectivo) {
-    var total = CalcularValorPagar();
-    if (Efectivo < total){
-
+        pedidos = new ArrayList<>();
     }
 
-    pedidos.clear();
+    public String getNumero() {
+        return numero;
+    }
 
-    return Efectivo -total;
-    
-  }
+    public void adicionarPedido(Pedido pedido) {
+        this.pedidos.add(pedido);
+    }
 
-  
-  public void AdicionarPedidos(Pedido pedido) {
-    this.pedidos.add(pedido); 
-    
-  }
+    public Integer calcularValorPagar() {
+        return pedidos.stream()
+                .filter(p -> p.getEstado() == Estadopedido.PENDIENTE_COBRAR)
+                .map(p -> p.calcularTotal())
+                .reduce((a, b) -> a + b)
+                .orElse(0);
+    }
 
-    //CONSTRUCTOR
-    
+    public Integer pagar(Integer efectivo) throws EfectivoInsuficienteException {
+        // Valido los datos
+        Integer total = calcularValorPagar();
+        if (efectivo < total) {
+            // Devolver error de fondos insuficientes
+            throw new EfectivoInsuficienteException("El valor entregado no cubre el total a pagar");
+        }
 
-  public Mesa(String numero) {
-    this.numero = numero;
-    pedidos = new ArrayList<>();
-  }
+        // Limpiar pedidos
+        pedidos.clear();
 
-  
-
-
-  //get
-  public String getNumero() {
-    return numero;
-  }
-
-  public List<Pedido> getPedidos() {
-    return pedidos;
-  }
-
-
-
-  
+        // Retorno la devuelta
+        return efectivo - total;
+    }
 }
