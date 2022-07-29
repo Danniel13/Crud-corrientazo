@@ -11,13 +11,26 @@ public class Mesa {
   //METODOS:
 
   public Integer CalcularValorPagar() {
-    return 0;
+    return pedidos.stream()
+    .filter(p->p.getEstado() ==Estadopedido.PENDIENTE_COBRAR)
+    .map(p->p.CalcularTotal())
+    .reduce((a, b) ->a+b)
+    .orElse(0);
+
+
 
 
   }
 
   public Integer Pagar(Integer Efectivo) {
-    return 0;
+    var total = CalcularValorPagar();
+    if (Efectivo < total){
+
+    }
+
+    pedidos.clear();
+
+    return Efectivo -total;
     
   }
 
@@ -41,6 +54,10 @@ public class Mesa {
   //get
   public String getNumero() {
     return numero;
+  }
+
+  public List<Pedido> getPedidos() {
+    return pedidos;
   }
 
 

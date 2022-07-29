@@ -53,7 +53,11 @@ public Pedido(String cliente, Opcionpedido opcion){
 
 
   public Integer CalcularTotal () {
-    return 0;
+    return opcion.getPrecio()
+    + adicionales.stream()
+    .map(a->a.getPrecio())
+    .reduce((a, b)->a+b)
+    .orElse(0);
   }
 }
 
