@@ -27,7 +27,7 @@ public class PrincipalVista {
             System.out.println("0 -> Salir de la aplicación");
             System.out.print("Cual es su elección?: ");
             try {
-                Integer opcion = scanner.nextInt();
+                var opcion = scanner.nextInt();
                 scanner.nextLine();
                 switch (opcion) {
                     case 0:
@@ -113,7 +113,7 @@ public class PrincipalVista {
         System.out.println("0 -> Salir al menu principal");
         System.out.print("Cual es su elección?: ");
         try {
-            Integer opcion = scanner.nextInt();
+            var opcion = scanner.nextInt();
             scanner.nextLine();
             switch (opcion) {
                 case 0:
@@ -148,7 +148,7 @@ public class PrincipalVista {
     }
 
     private void limpiarPantalla() {
-        for(Integer i = 0; i < 50; i++){
+        for(var i = 0; i < 50; i++){
             System.out.println();
         }
     }

@@ -33,7 +33,7 @@ public class PedidoView {
           List<OpcionCarne> carnes, List<OpcionEnsalada> ensaladas, List<OpcionJugo> jugos) {
       // Pedir informacion del cliente
       System.out.print("Ingrese el nombre (descripcion) del cliente: ");
-      String cliente = scanner.nextLine();
+      var cliente = scanner.nextLine();
 
       // Pedir opcion de pedido (completo o bandeja)
       var opcion = pedirOpcionPedido();
