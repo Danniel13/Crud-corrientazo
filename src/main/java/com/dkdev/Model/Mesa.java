@@ -46,4 +46,8 @@ public class Mesa {
         // Retorno la devuelta
         return efectivo - total;
     }
+
+    public List<Pedido> getPedidos() {
+      return pedidos;
+  }
 }

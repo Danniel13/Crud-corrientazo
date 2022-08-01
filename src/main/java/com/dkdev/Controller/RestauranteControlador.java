@@ -8,9 +8,7 @@ import com.dkdev.Model.OpcionEnsalada;
 import com.dkdev.Model.OpcionJugo;
 import com.dkdev.Model.OpcionPrincipio;
 import com.dkdev.Model.Opcionsopa;
-import com.dkdev.Model.var;
-
-import com.dkdev.view.PedidoView;
+import com.dkdev.View.PedidoView;
 
 public class RestauranteControlador {
 

@@ -11,10 +11,9 @@ import com.dkdev.Model.OpcionCarne;
 import com.dkdev.Model.OpcionEnsalada;
 import com.dkdev.Model.OpcionJugo;
 import com.dkdev.Model.OpcionPrincipio;
-import com.dkdev.Model.Pedido;
-import com.dkdev.Model.var;
-import com.dkdev.Model.Opcionsopa;
 import com.dkdev.Model.Opcionpedido;
+import com.dkdev.Model.Opcionsopa;
+import com.dkdev.Model.Pedido;
 
 
 
@@ -90,7 +89,7 @@ public class PedidoView {
       }
   }
 
-  private OpcionPedido pedirOpcionPedido() {
+  private Opcionpedido pedirOpcionPedido() {
       while (true) {
           System.out.println("Opciones de pedido:\nC -> Almuerzo Completo\nB -> Bandeja");
           System.out.print("C / B: ");
@@ -123,4 +122,4 @@ public class PedidoView {
 
 }
 
-}
+

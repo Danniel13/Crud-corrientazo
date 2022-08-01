@@ -18,7 +18,7 @@ public class PrincipalVista {
 
     public void iniciarAplicacion() {
 
-        boolean mostrarMenu = true;
+        var mostrarMenu = true;
         while (mostrarMenu) {
             limpiarPantalla();
             System.out.println(".: SISTEMA DE INFORMACION EL CORRIENTAZO :.");
