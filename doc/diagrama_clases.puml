@@ -1,40 +1,76 @@
 @startuml "Diagrama de clases"
 
-class Persona
+class Mesa {
+    - String numero
 
-Class Mesa{
-  - String numero
-  + Integer Calculartotal
+    + Integer calcularValorPagar()
+    + Integer pagar(Integer efectivo)
 }
-Mesa "1"-- "*" Pedido
 
-pedido .right.>EstadoPedido
-pedido .left- Adicional
+class Pedido {
+    - String cliente 
 
-Pedido --OpcionPedido
+    + void entregar()
+}
 
-OpcionPedido <|-- AlmCompleto
-OpcionPedido <|-- Bandeja
+enum EstadoPedido {
+    PENDIENTE_ENTREGAR
+    PENDIENTE_COBRAR
+}
 
-AlmCompleto --OpcionSopa
-AlmCompleto --OpcionPrincipio
-AlmCompleto --OpcionCarne
-AlmCompleto --OpcionEnsalada
-AlmCompleto --OpcionJugo
+class Adicional {
+    - String nombre
+    - Integer precio
+}
+
+class OpcionSopa {
+    - nombre
+}
+
+class OpcionPrincipio {
+    - nombre
+}
+
+class OpcionCarne {
+    - nombre
+}
+
+class OpcionEnsalada {
+    - nombre
+}
+
+class OpcionJugo {
+    - nombre
+}
+
+abstract class OpcionPedido {
+    - precio
+}
+
+class Completo {
+
+}
+
+class Bandeja {
+
+}
 
 
-Bandeja --OpcionPrincipio
-Bandeja --OpcionCarne
-Bandeja --OpcionEnsalada
-Bandeja --OpcionJugo
+Mesa "1" -- "*" Pedido
 
+Pedido .right.> EstadoPedido
+Pedido "*" -left- "*" Adicional
 
+Pedido "1" -- "1" OpcionPedido
+
+OpcionPedido <|-left- Completo
+OpcionPedido <|-left- Bandeja
+
+Completo "*" -- "1" OpcionSopa
+
+OpcionPedido "*" -- "1" OpcionPrincipio
+OpcionPedido "*" -- "1" OpcionCarne
+OpcionPedido "*" -- "1" OpcionEnsalada
+OpcionPedido "*" -- "1" OpcionJugo
 
 @enduml
-
-
-' Crear diagramma entidad relacion
-' Crear diagrama de clases
-
-
-

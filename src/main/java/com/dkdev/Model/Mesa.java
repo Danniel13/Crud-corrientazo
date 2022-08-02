@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.dkdev.exceptions.EfectivoInsuficienteException;
 
-
 public class Mesa {
     private String numero;
     private List<Pedido> pedidos;
