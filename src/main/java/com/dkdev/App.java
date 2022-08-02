@@ -53,13 +53,13 @@ public final class App {
       var total = mesa.calcularValorPagar();
       System.out.printf("La mesa %s debe $ %,d %n", mesa.getNumero(), total);
 
-      try {
-          var efectivo = 24_000;
-          var devuelta = mesa.pagar(efectivo);
-          System.out.printf("La mesa %s paga $ %,d y su devuelta es $ %,d. %n",
-                  mesa.getNumero(), efectivo, devuelta);
-      } catch (EfectivoInsuficienteException ex) {
-          System.err.println(ex.getMessage());
-      }
+      // try {
+      //     var efectivo = 24_000;
+      //     var devuelta = mesa.pagar(efectivo);
+      //     System.out.printf("La mesa %s paga $ %,d y su devuelta es $ %,d. %n",
+      //             mesa.getNumero(), efectivo, devuelta);
+      // } catch (EfectivoInsuficienteException ex) {
+      //     System.err.println(ex.getMessage());
+      // }
   }
 }

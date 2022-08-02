@@ -9,9 +9,9 @@ import com.dkdev.Model.OpcionJugo;
 import com.dkdev.Model.OpcionPrincipio;
 import com.dkdev.Model.Opcionsopa;
 import com.dkdev.View.PedidoView;
+import com.dkdev.exceptions.EfectivoInsuficienteException;
 
 public class RestauranteControlador {
-
   private PedidoView pedidoView;
 
   private List<Mesa> mesas = null;
@@ -106,9 +106,39 @@ public class RestauranteControlador {
   }
 
   public void entregarPedidoDeMesa() {
+      // Seleccionar una mesa
+      var mesa = pedidoView.seleccionarMesa(listarMesas());
+
+      // Seleccionar pedido de la mesa a entregar
+      var pedido = pedidoView.seleccionarPedidoEntrega(mesa);
+
+      pedido.entregar();
   }
 
   public void pagarCuentaMesa() {
+      // Seleccionar una mesa
+      var mesa = pedidoView.seleccionarMesa(listarMesas());
+
+      var total = mesa.calcularValorPagar();
+      pedidoView.mostrarMensaje(String.format("La cuenta de mesa es: $ %,d.", total));
+
+      var efectivo = pedidoView.leerEfectivo();
+
+      try {
+          // Valido los datos
+          if (efectivo < total) {
+              // Devolver error de fondos insuficientes
+              throw new EfectivoInsuficienteException("El valor entregado no cubre el total a pagar");
+          }
+
+          // Limpiar pedidos
+          mesa.limpiarPedidos();
+
+          // Retorno la devuelta
+          pedidoView.mostrarMensaje(String.format("La devuelta es: $ %,d.", efectivo - total));
+      } catch (EfectivoInsuficienteException ex) {
+          pedidoView.mostrarError("El valor ingresado no es suficiente para cubrir la deuda.");
+      }
   }
 
   public void consultarEstadoMesa() {

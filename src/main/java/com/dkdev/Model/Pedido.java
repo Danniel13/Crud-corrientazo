@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    private String cliente;
+     private String cliente;
     private Estadopedido estado;
     private List<Adicional> adicionales;
     private Opcionpedido opcion;
@@ -55,4 +55,11 @@ public class Pedido {
                         .reduce((a, b) -> a + b)
                         .orElse(0);
     }
+
+    @Override
+    public String toString() {
+        return "Pedido [cliente=" + cliente + ", estado=" + estado + ", opcion=" + opcion
+                + ", adicionales=" + adicionales + "]";
+    }
+
 }

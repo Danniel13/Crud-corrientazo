@@ -3,123 +3,147 @@ package com.dkdev.View;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.dkdev.Model.Bandeja;
 import com.dkdev.Model.Completo;
+import com.dkdev.Model.Estadopedido;
 import com.dkdev.Model.Mesa;
 import com.dkdev.Model.OpcionCarne;
 import com.dkdev.Model.OpcionEnsalada;
 import com.dkdev.Model.OpcionJugo;
 import com.dkdev.Model.OpcionPrincipio;
-import com.dkdev.Model.Opcionpedido;
-import com.dkdev.Model.Opcionsopa;
 import com.dkdev.Model.Pedido;
-
-
+import com.dkdev.Model.Opcionsopa;
+import com.dkdev.Model.Opcionpedido;
 
 
 public class PedidoView {
-  private Scanner scanner;
 
-  public PedidoView() {
-      this.scanner = new Scanner(System.in);
-  }
+    private Scanner scanner;
 
-  public Mesa seleccionarMesa(List<Mesa> mesas) {
-      return pedirOpcion(mesas, "Mesas");
-  }
+    public PedidoView() {
+        this.scanner = new Scanner(System.in);
+    }
 
-  public Pedido pedirInformacionPedido(List<Opcionsopa> sopas, List<OpcionPrincipio> principios,
-          List<OpcionCarne> carnes, List<OpcionEnsalada> ensaladas, List<OpcionJugo> jugos) {
-      // Pedir informacion del cliente
-      System.out.print("Ingrese el nombre (descripcion) del cliente: ");
-      var cliente = scanner.nextLine();
+    public Mesa seleccionarMesa(List<Mesa> mesas) {
+        return pedirOpcion(mesas, "Mesas");
+    }
 
-      // Pedir opcion de pedido (completo o bandeja)
-      var opcion = pedirOpcionPedido();
+    public Pedido pedirInformacionPedido(List<Opcionsopa> sopas, List<OpcionPrincipio> principios,
+            List<OpcionCarne> carnes, List<OpcionEnsalada> ensaladas, List<OpcionJugo> jugos) {
+        // Pedir informacion del cliente
+        System.out.print("Ingrese el nombre (descripcion) del cliente: ");
+        var cliente = scanner.nextLine();
 
-      if (opcion instanceof Completo) {
-          // Pedir Sopa
-          ((Completo) opcion).setSopa(pedirOpcion(sopas, "Sopas"));
-      }
+        // Pedir opcion de pedido (completo o bandeja)
+        var opcion = pedirOpcionPedido();
 
-      // Pedir Principio
-      opcion.setPrincipio(pedirOpcion(principios, "Principios"));
-      // Pedir Carne
-      opcion.setCarne(pedirOpcion(carnes, "Carnes"));
-      // Pedir Ensalada (si la desea)
-      opcion.setEnsalada(pedirOpcion(ensaladas, "Ensaladas", true));
-      // Pedir Jugo
-      opcion.setJugo(pedirOpcion(jugos, "Jugos"));
+        if (opcion instanceof Completo) {
+            // Pedir Sopa
+            ((Completo) opcion).setSopa(pedirOpcion(sopas, "Sopas"));
+        }
 
-      return new Pedido(cliente, opcion);
-  }
+        // Pedir Principio
+        opcion.setPrincipio(pedirOpcion(principios, "Principios"));
+        // Pedir Carne
+        opcion.setCarne(pedirOpcion(carnes, "Carnes"));
+        // Pedir Ensalada (si la desea)
+        opcion.setEnsalada(pedirOpcion(ensaladas, "Ensaladas", true));
+        // Pedir Jugo
+        opcion.setJugo(pedirOpcion(jugos, "Jugos"));
 
-  private <T> T pedirOpcion(List<T> opciones, String nombre) {
-      return pedirOpcion(opciones, nombre, false);
-  }
+        return new Pedido(cliente, opcion);
+    }
 
-  private <T> T pedirOpcion(List<T> opciones, String nombre, Boolean opcional) {
-      while (true) {
-          // Listo las opciones existentes
-          System.out.println(nombre + " existentes:");
-          for (int i = 0; i < opciones.size(); i++) {
-              System.out.printf("%d -> %s %n", (i + 1), opciones.get(i));
-          }
-          if (opcional) {
-              System.out.printf("%d -> %s %n", 0, "Ninguno");
-          }
+    private <T> T pedirOpcion(List<T> opciones, String nombre) {
+        return pedirOpcion(opciones, nombre, false);
+    }
 
-          // Selecciono la mesa
-          System.out.print("Cual es su elección: ");
-          try {
-              var opcion = scanner.nextInt();
-              scanner.nextLine();
-              if (opcional && opcion == 0) {
-                  return null;
-              } else if (opcion >= 1 && opcion <= opciones.size()) {
-                  return opciones.get(opcion - 1);
-              } else {
-                  System.err.println("Opcion inválida. Intente de nuevo.");
-              }
-          } catch (InputMismatchException e) {
-              System.err.println("Opcion inválida. Intente de nuevo.");
-              scanner.nextLine();
-          }
-      }
-  }
+    private <T> T pedirOpcion(List<T> opciones, String nombre, Boolean opcional) {
+        while (true) {
+            // Listo las opciones existentes
+            System.out.println(nombre + " existentes:");
+            for (int i = 0; i < opciones.size(); i++) {
+                System.out.printf("%d -> %s %n", (i + 1), opciones.get(i));
+            }
+            if (opcional) {
+                System.out.printf("%d -> %s %n", 0, "Ninguno");
+            }
 
-  private Opcionpedido pedirOpcionPedido() {
-      while (true) {
-          System.out.println("Opciones de pedido:\nC -> Almuerzo Completo\nB -> Bandeja");
-          System.out.print("C / B: ");
-          var opcion = scanner.nextLine();
-          switch (opcion.toUpperCase()) {
-              case "C":
-                  return new Completo(12_000);
-              case "B":
-                  return new Bandeja(10_000);
-              default:
-                  System.err.println("Opcion inválida. Intenta de nuevo.");
-          }
-      }
-  }
+            // Selecciono la mesa
+            System.out.print("Cual es su elección: ");
+            try {
+                var opcion = scanner.nextInt();
+                scanner.nextLine();
+                if (opcional && opcion == 0) {
+                    return null;
+                } else if (opcion >= 1 && opcion <= opciones.size()) {
+                    return opciones.get(opcion - 1);
+                } else {
+                    System.err.println("Opcion inválida. Intente de nuevo.");
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("Opcion inválida. Intente de nuevo.");
+                scanner.nextLine();
+            }
+        }
+    }
 
-  public void mostrarEstadoMesa(Mesa mesa) {
-      System.out.println(mesa);
-      System.out.println("Pedidos:");
-      mesa.getPedidos()
-              .forEach(System.out::println);
-  }
+    private Opcionpedido pedirOpcionPedido() {
+        while (true) {
+            System.out.println("Opciones de pedido:\nC -> Almuerzo Completo\nB -> Bandeja");
+            System.out.print("C / B: ");
+            var opcion = scanner.nextLine();
+            switch (opcion.toUpperCase()) {
+                case "C":
+                    return new Completo(12_000);
+                case "B":
+                    return new Bandeja(10_000);
+                default:
+                    System.err.println("Opcion inválida. Intenta de nuevo.");
+            }
+        }
+    }
 
-  public void mostrarMensaje(String mensaje) {
-      System.out.println(mensaje);
-  }
+    public void mostrarEstadoMesa(Mesa mesa) {
+        System.out.println(mesa);
+        System.out.println("Pedidos:");
+        mesa.getPedidos()
+                .forEach(System.out::println);
+    }
 
-  public void mostrarError(String error) {
-      System.out.println(error);
-  }
+    public void mostrarMensaje(String mensaje) {
+        System.out.println(mensaje);
+    }
+
+    public void mostrarError(String error) {
+        System.out.println(error);
+    }
+
+    public Pedido seleccionarPedidoEntrega(Mesa mesa) {
+        var pedidos = mesa.getPedidos().stream()
+                .filter(p -> p.getEstado() == Estadopedido.PENDIENTE_ENTREGAR)
+                .collect(Collectors.toList());
+
+        return pedirOpcion(pedidos, "Pedido");
+    }
+
+    public Integer leerEfectivo() {
+        Integer respuesta = null;
+
+        while (respuesta == null) {
+            try {
+                System.out.print("Ingrese el valor de efectivo recibido: ");
+                respuesta = scanner.nextInt();
+            } catch (InputMismatchException ex) {
+                System.err.println("Valor inválidi. Intente de nuevo.");
+            } finally {
+                scanner.nextLine();
+            }
+        }
+
+        return respuesta;
+    }
 
 }
-
-
