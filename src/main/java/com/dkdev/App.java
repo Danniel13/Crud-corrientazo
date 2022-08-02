@@ -29,29 +29,29 @@ public final class App {
       menu.iniciarAplicacion();
   }
 
-  private static void prueba() {
-      var mesa = new Mesa("01");
+  // private static void prueba() {
+  //     var mesa = new Mesa("01");
 
-      var sopa = new Opcionsopa("Pasta");
-      var principio = new OpcionPrincipio("Frijoles");
-      var carne = new OpcionCarne("Res a la plancha");
-      var ensalada = new OpcionEnsalada("Rusa");
-      var jugo = new OpcionJugo("Limonada");
+  //     var sopa = new Opcionsopa("Pasta");
+  //     var principio = new OpcionPrincipio("Frijoles");
+  //     var carne = new OpcionCarne("Res a la plancha");
+  //     var ensalada = new OpcionEnsalada("Rusa");
+  //     var jugo = new OpcionJugo("Limonada");
 
-      var cesar = new Pedido("Cesar", new Completo(12_000, sopa, principio, carne, ensalada, jugo));
-      cesar.agregarAdicional(new Adicional("Huevo", 1_000));
-      cesar.agregarAdicional(new Adicional("Gaseosa", 2_000));
+  //     var cesar = new Pedido("Cesar", new Completo(12_000, sopa, principio, carne, ensalada, jugo));
+  //     cesar.agregarAdicional(new Adicional("Huevo", 1_000));
+  //     cesar.agregarAdicional(new Adicional("Gaseosa", 2_000));
 
-      var laura = new Pedido("Laura", new Bandeja(10_000, principio, carne, jugo));
+  //     var laura = new Pedido("Laura", new Bandeja(10_000, principio, carne, jugo));
 
-      mesa.adicionarPedido(cesar);
-      mesa.adicionarPedido(laura);
+  //     mesa.adicionarPedido(cesar);
+  //     mesa.adicionarPedido(laura);
 
-      // cesar.entregar();
-      // laura.entregar();
+  //     // cesar.entregar();
+  //     // laura.entregar();
 
-      var total = mesa.calcularValorPagar();
-      System.out.printf("La mesa %s debe $ %,d %n", mesa.getNumero(), total);
+  //     var total = mesa.calcularValorPagar();
+  //     System.out.printf("La mesa %s debe $ %,d %n", mesa.getNumero(), total);
 
       // try {
       //     var efectivo = 24_000;
@@ -62,4 +62,4 @@ public final class App {
       //     System.err.println(ex.getMessage());
       // }
   }
-}
+
