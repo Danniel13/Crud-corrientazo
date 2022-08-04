@@ -111,7 +111,7 @@ public class PrincipalVista {
             scanner.nextLine();
             switch (opcion) {
                 case 0:
-                    break;
+                    controlador.agregarmesa();
                 case 1:
                     // TODO: Implementar
                     break;
@@ -146,4 +146,18 @@ public class PrincipalVista {
             System.out.println();
         }
     }
+
+    public void agregarmesa(){
+    // Pedir el nombre de la mesa
+      var mesa = Mesaview.leerdatosmesa();
+
+    // Agregarla a la base de datos la mesa:
+
+
+    // Listar las mesas que estan en las bases de datos
+    }
 }
+
+
+
+
