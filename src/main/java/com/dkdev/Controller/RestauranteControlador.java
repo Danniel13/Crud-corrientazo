@@ -1,4 +1,5 @@
 package com.dkdev.Controller;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,144 +9,201 @@ import com.dkdev.Model.OpcionEnsalada;
 import com.dkdev.Model.OpcionJugo;
 import com.dkdev.Model.OpcionPrincipio;
 import com.dkdev.Model.Opcionsopa;
+import com.dkdev.Model.DAO.MesaDao;
+import com.dkdev.Model.DAO.OpcionAlimentoDao;
+import com.dkdev.Model.DAO.PedidoDao;
+import com.dkdev.View.Mesaview;
 import com.dkdev.View.PedidoView;
 import com.dkdev.exceptions.EfectivoInsuficienteException;
 
 public class RestauranteControlador {
   private PedidoView pedidoView;
+  private Mesaview mesaView;
 
-  private List<Mesa> mesas = null;
-  private List<Opcionsopa> sopas = null;
-  private List<OpcionPrincipio> principios = null;
-  private List<OpcionCarne> carnes = null;
-  private List<OpcionEnsalada> ensaladas = null;
-  private List<OpcionJugo> jugos = null;
+  private MesaDao mesaDao;
+    private OpcionAlimentoDao<Opcionsopa> sopaDao;
+    private OpcionAlimentoDao<OpcionPrincipio> principioDao;
+    private OpcionAlimentoDao<OpcionCarne> carneDao;
+    private OpcionAlimentoDao<OpcionEnsalada> ensaladaDao;
+    private OpcionAlimentoDao<OpcionJugo> jugoDao;
+    private PedidoDao pedidoDao;
 
   public RestauranteControlador() {
-      this.pedidoView = new PedidoView();
-  }
+    this.pedidoView = new PedidoView();
+    this.mesaView = new Mesaview();
 
-  public void agregarPedidoAMesa() {
-      // Seleccionar una mesa
-      var mesa = pedidoView.seleccionarMesa(listarMesas());
+    this.mesaDao = new MesaDao();
+    this.sopaDao = new OpcionAlimentoDao<>("OpcionSopa");
+    this.principioDao = new OpcionAlimentoDao<>("OpcionPrincipio");
+    this.carneDao = new OpcionAlimentoDao<>("OpcionCarne");
+    this.ensaladaDao = new OpcionAlimentoDao<>("OpcionEnsalada");
+    this.jugoDao = new OpcionAlimentoDao<>("OpcionJugo");
+    this.pedidoDao = new PedidoDao();
+}
 
-      // Pedir la informacion del pedido
-      var pedido = pedidoView.pedirInformacionPedido(listarSopas(), listarPrincipios(), listarCarnes(),
-              listarEnsaladas(), listarJugos());
+public void agregarPedidoAMesa() {
+    try {
+        // Seleccionar una mesa
+        var mesa = pedidoView.seleccionarMesa(listarMesas());
 
-      // Agregar el pedido a la mesa
-      mesa.adicionarPedido(pedido);
-      pedidoView.mostrarMensaje("Pedidio ingresado de forma correcta.");
-  }
+        // Pedir la informacion del pedido
+        var pedido = pedidoView.pedirInformacionPedido(listarSopas(), listarPrincipios(), listarCarnes(),
+                listarEnsaladas(), listarJugos());
 
-  private List<OpcionJugo> listarJugos() {
-      if (jugos == null) {
-          jugos = Arrays.asList(new OpcionJugo("Limonada"),
-                  new OpcionJugo("Guayaba"),
-                  new OpcionJugo("Mora"),
-                  new OpcionJugo("Uva"));
-      }
-      return jugos;
-  }
+        // Agregar el pedido a la mesa
+        pedidoDao.adicionarPedidoMesa(mesa, pedido);
+        pedidoView.mostrarMensaje("Pedido ingresado de forma correcta.");
+    } catch (SQLException e) {
+        mesaView.mostrarError("Problemas gestionando la base de datos: " + e.getMessage());
+    }
+}
 
-  private List<OpcionEnsalada> listarEnsaladas() {
-      if (ensaladas == null) {
-          ensaladas = Arrays.asList(new OpcionEnsalada("Solo tomate"),
-                  new OpcionEnsalada("Tomate y cebolla"),
-                  new OpcionEnsalada("Aguacate"),
-                  new OpcionEnsalada("Rusa"));
-      }
-      return ensaladas;
-  }
+private List<OpcionJugo> listarJugos() throws SQLException {
+    return jugoDao.listar(rset -> {
+        try {
+            var opcion = new OpcionJugo(rset.getString("nombre"));
+            opcion.setId(rset.getInt("id"));
 
-  private List<OpcionCarne> listarCarnes() {
-      if (carnes == null) {
-          carnes = Arrays.asList(new OpcionCarne("Res a la plancha"),
-                  new OpcionCarne("Cerdo a la plancha"),
-                  new OpcionCarne("Pechuga a la plancha"),
-                  new OpcionCarne("Higado encebollado"));
-      }
-      return carnes;
-  }
+            return opcion;
+        } catch (SQLException e) {
+            return null;
+        }
+    });
+}
 
-  private List<OpcionPrincipio> listarPrincipios() {
-      if (principios == null) {
-          principios = Arrays.asList(new OpcionPrincipio("Frijoles"),
-                  new OpcionPrincipio("Lentejas"),
-                  new OpcionPrincipio("Papa guisada"),
-                  new OpcionPrincipio("Espaguetis"));
-      }
-      return principios;
-  }
+private List<OpcionEnsalada> listarEnsaladas() throws SQLException {
+    return ensaladaDao.listar(rset -> {
+        try {
+            var opcion = new OpcionEnsalada(rset.getString("nombre"));
+            opcion.setId(rset.getInt("id"));
 
-  private List<Opcionsopa> listarSopas() {
-      if (sopas == null) {
-          sopas = Arrays.asList(new Opcionsopa("Pasta"),
-                  new Opcionsopa("Consomé"),
-                  new Opcionsopa("Crema Zanahoria"),
-                  new Opcionsopa("Caldo Costilla"),
-                  new Opcionsopa("Verduras"));
-      }
-      return sopas;
-  }
+            return opcion;
+        } catch (SQLException e) {
+            return null;
+        }
+    });
+}
 
-  private List<Mesa> listarMesas() {
-      if (mesas == null) {
-          mesas = Arrays.asList(new Mesa("VIP01"),
-                  new Mesa("VIP02"),
-                  new Mesa("P101"),
-                  new Mesa("P102"),
-                  new Mesa("P103"),
-                  new Mesa("P201"),
-                  new Mesa("P202"));
-      }
-      return mesas;
-  }
+private List<OpcionCarne> listarCarnes() throws SQLException {
+    return carneDao.listar(rset -> {
+        try {
+            var opcion = new OpcionCarne(rset.getString("nombre"));
+            opcion.setId(rset.getInt("id"));
 
-  public void agregarAdicionalAPedido() {
-  }
+            return opcion;
+        } catch (SQLException e) {
+            return null;
+        }
+    });
+}
 
-  public void entregarPedidoDeMesa() {
-      // Seleccionar una mesa
-      var mesa = pedidoView.seleccionarMesa(listarMesas());
+private List<OpcionPrincipio> listarPrincipios() throws SQLException {
+    return principioDao.listar(rset -> {
+        try {
+            var opcion = new OpcionPrincipio(rset.getString("nombre"));
+            opcion.setId(rset.getInt("id"));
 
-      // Seleccionar pedido de la mesa a entregar
-      var pedido = pedidoView.seleccionarPedidoEntrega(mesa);
+            return opcion;
+        } catch (SQLException e) {
+            return null;
+        }
+    });
+}
 
-      pedido.entregar();
-  }
+private List<Opcionsopa> listarSopas() throws SQLException {
+    return sopaDao.listar(rset -> {
+        try {
+            var opcion = new Opcionsopa(rset.getString("nombre"));
+            opcion.setId(rset.getInt("id"));
 
-  public void pagarCuentaMesa() {
-      // Seleccionar una mesa
-      var mesa = pedidoView.seleccionarMesa(listarMesas());
+            return opcion;
+        } catch (SQLException e) {
+            return null;
+        }
+    });
+}
 
-      var total = mesa.calcularValorPagar();
-      pedidoView.mostrarMensaje(String.format("La cuenta de mesa es: $ %,d.", total));
+private List<Mesa> listarMesas() throws SQLException {
+    return mesaDao.listar();
+}
 
-      var efectivo = pedidoView.leerEfectivo();
+public void agregarAdicionalAPedido() {
+}
 
-      try {
-          // Valido los datos
-          if (efectivo < total) {
-              // Devolver error de fondos insuficientes
-              throw new EfectivoInsuficienteException("El valor entregado no cubre el total a pagar");
-          }
+public void entregarPedidoDeMesa() {
+    try {
+        // Seleccionar una mesa
+        var mesa = pedidoView.seleccionarMesa(listarMesas());
 
-          // Limpiar pedidos
-          mesa.limpiarPedidos();
+        // Seleccionar pedido de la mesa a entregar
+        var pedidos = pedidoDao.listar(mesa);
+        var pedido = pedidoView.seleccionarPedidoEntrega(pedidos);
 
-          // Retorno la devuelta
-          pedidoView.mostrarMensaje(String.format("La devuelta es: $ %,d.", efectivo - total));
-      } catch (EfectivoInsuficienteException ex) {
-          pedidoView.mostrarError("El valor ingresado no es suficiente para cubrir la deuda.");
-      }
-  }
+        pedido.entregar();
+        pedidoDao.entregarPedido(pedido);
+    } catch (SQLException e) {
+        mesaView.mostrarError("Problemas gestionando la base de datos: " + e.getMessage());
+    }
+}
 
-  public void consultarEstadoMesa() {
-      // Seleccionar una mesa
-      var mesa = pedidoView.seleccionarMesa(listarMesas());
+public void pagarCuentaMesa() {
+    try {
+        // Seleccionar una mesa
+        var mesa = pedidoView.seleccionarMesa(listarMesas());
 
-      pedidoView.mostrarEstadoMesa(mesa);
-  }
+        var total = mesa.calcularValorPagar();
+        pedidoView.mostrarMensaje(String.format("La cuenta de mesa es: $ %,d.", total));
+
+        var efectivo = pedidoView.leerEfectivo();
+
+        try {
+            // Valido los datos
+            if (efectivo < total) {
+                // Devolver error de fondos insuficientes
+                throw new EfectivoInsuficienteException("El valor entregado no cubre el total a pagar");
+            }
+
+            // Limpiar pedidos
+            mesa.limpiarPedidos();
+
+            // Retorno la devuelta
+            pedidoView.mostrarMensaje(String.format("La devuelta es: $ %,d.", efectivo - total));
+        } catch (EfectivoInsuficienteException ex) {
+            pedidoView.mostrarError("El valor ingresado no es suficiente para cubrir la deuda.");
+        }
+    } catch (SQLException e) {
+        mesaView.mostrarError("Problemas gestionando la base de datos: " + e.getMessage());
+    }
+}
+
+public void consultarEstadoMesa() {
+    try {
+        // Seleccionar una mesa
+        var mesa = pedidoView.seleccionarMesa(listarMesas());
+        var pedidos = pedidoDao.listar(mesa);
+
+        pedidoView.mostrarEstadoMesa(mesa, pedidos);
+    } catch (SQLException e) {
+        mesaView.mostrarError("Problemas gestionando la base de datos: " + e.getMessage());
+    }
+}
+
+public void agregarMesa() {
+    // Pedir los datos de la mesa
+    var mesa = mesaView.leerDatosMesa();
+
+    // Agregarla a la base de datos
+    try {
+        mesaDao.guardar(mesa);
+
+        mesaView.mostrarMensaje("Mesa guardada exitosamente!");
+
+        // Listar las mesas que se encuentran en la base de datos
+        mesaView.mostrarMesas(listarMesas());
+    } catch (SQLException e) {
+        mesaView.mostrarError("Problemas gestionando la base de datos: " + e.getMessage());
+    }
+
+}
 
 }
