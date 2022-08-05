@@ -4,62 +4,75 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-     private String cliente;
-    private Estadopedido estado;
-    private List<Adicional> adicionales;
-    private Opcionpedido opcion;
+  private String cliente;
+  private Estadopedido estado;
+  private List<Adicional> adicionales;
+  private Opcionpedido opcion;
+  private Integer id;
 
-    public Pedido(String cliente) {
-        this.cliente = cliente;
+  public Pedido(String cliente) {
+      this.cliente = cliente;
 
-        this.estado = Estadopedido.PENDIENTE_ENTREGAR;
-        this.adicionales = new ArrayList<>();
-    }
+      this.estado = Estadopedido.PENDIENTE_ENTREGAR;
+      this.adicionales = new ArrayList<>();
+  }
 
-    public Pedido(String cliente, Opcionpedido opcion) {
-        this.cliente = cliente;
-        this.opcion = opcion;
+  public Pedido(String cliente, Opcionpedido opcion) {
+      this.cliente = cliente;
+      this.opcion = opcion;
 
-        this.estado = Estadopedido.PENDIENTE_ENTREGAR;
-        this.adicionales = new ArrayList<>();
-    }
+      this.estado = Estadopedido.PENDIENTE_ENTREGAR;
+      this.adicionales = new ArrayList<>();
+  }
 
-    public String getCliente() {
-        return cliente;
-    }
+  public void setId(Integer id) {
+      this.id = id;
+  }
 
-    public Estadopedido getEstado() {
-        return estado;
-    }
+  public Integer getId() {
+      return id;
+  }
 
-    public Opcionpedido getOpcion() {
-        return opcion;
-    }
+  public void setEstado(Estadopedido estado) {
+      this.estado = estado;
+  }
 
-    public void setOpcion(Opcionpedido opcion) {
-        this.opcion = opcion;
-    }
+  public String getCliente() {
+      return cliente;
+  }
 
-    public void entregar() {
-        this.estado = Estadopedido.PENDIENTE_COBRAR;
-    }
+  public Estadopedido getEstado() {
+      return estado;
+  }
 
-    public void agregarAdicional(Adicional adicional) {
-        this.adicionales.add(adicional);
-    }
+  public Opcionpedido getOpcion() {
+      return opcion;
+  }
 
-    public Integer calcularTotal() {
-        return opcion.getPrecio()
-                + adicionales.stream()
-                        .map(a -> a.getPrecio())
-                        .reduce((a, b) -> a + b)
-                        .orElse(0);
-    }
+  public void setOpcion(Opcionpedido opcion) {
+      this.opcion = opcion;
+  }
 
-    @Override
-    public String toString() {
-        return "Pedido [cliente=" + cliente + ", estado=" + estado + ", opcion=" + opcion
-                + ", adicionales=" + adicionales + "]";
-    }
+  public void entregar() {
+      this.estado = Estadopedido.PENDIENTE_COBRAR;
+  }
+
+  public void agregarAdicional(Adicional adicional) {
+      this.adicionales.add(adicional);
+  }
+
+  public Integer calcularTotal() {
+      return opcion.getPrecio()
+              + adicionales.stream()
+                      .map(a -> a.getPrecio())
+                      .reduce((a, b) -> a + b)
+                      .orElse(0);
+  }
+
+  @Override
+  public String toString() {
+      return "Pedido [cliente=" + cliente + ", estado=" + estado + ", opcion=" + opcion
+              + ", adicionales=" + adicionales + "]";
+  }
 
 }

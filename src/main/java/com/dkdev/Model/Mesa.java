@@ -7,40 +7,49 @@ import com.dkdev.exceptions.EfectivoInsuficienteException;
 
 public class Mesa {
   private String numero;
-  private List<Pedido> pedidos;
+    private List<Pedido> pedidos;
+    private Integer id;
 
-  public Mesa(String numero) {
-      this.numero = numero;
+    public Mesa(String numero) {
+        this.numero = numero;
 
-      pedidos = new ArrayList<>();
-  }
+        pedidos = new ArrayList<>();
+    }
 
-  public String getNumero() {
-      return numero;
-  }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-  public List<Pedido> getPedidos() {
-      return pedidos;
-  }
+    public Integer getId() {
+        return id;
+    }
 
-  public void adicionarPedido(Pedido pedido) {
-      this.pedidos.add(pedido);
-  }
+    public String getNumero() {
+        return numero;
+    }
 
-  public Integer calcularValorPagar() {
-      return pedidos.stream()
-              .filter(p -> p.getEstado() == Estadopedido.PENDIENTE_COBRAR)
-              .map(p -> p.calcularTotal())
-              .reduce((a, b) -> a + b)
-              .orElse(0);
-  }
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
 
-  @Override
-  public String toString() {
-      return "Mesa # " + numero;
-  }
+    public void adicionarPedido(Pedido pedido) {
+        this.pedidos.add(pedido);
+    }
 
-  public void limpiarPedidos() {
-      pedidos.clear();
-  }
+    public Integer calcularValorPagar() {
+        return pedidos.stream()
+                .filter(p -> p.getEstado() == Estadopedido.PENDIENTE_COBRAR)
+                .map(p -> p.calcularTotal())
+                .reduce((a, b) -> a + b)
+                .orElse(0);
+    }
+
+    @Override
+    public String toString() {
+        return "Mesa # " + numero;
+    }
+
+    public void limpiarPedidos() {
+        pedidos.clear();
+    }
 }
