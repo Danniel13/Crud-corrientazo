@@ -3,6 +3,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.dkdev.Model.Estadopedido;
 import com.dkdev.Model.Mesa;
 import com.dkdev.Model.OpcionCarne;
 import com.dkdev.Model.OpcionEnsalada;
@@ -146,12 +147,22 @@ public void entregarPedidoDeMesa() {
     }
 }
 
+public Integer calcularValorPagarMesa(Mesa mesa) throws SQLException {
+    var pedidos = pedidoDao.listar(mesa);
+    return pedidos.stream()
+            .filter(p -> p.getEstado() == Estadopedido.PENDIENTE_COBRAR)
+            .map(p -> p.calcularTotal())
+            .reduce((a, b) -> a + b)
+            .orElse(0);
+}
+
+
 public void pagarCuentaMesa() {
     try {
         // Seleccionar una mesa
         var mesa = pedidoView.seleccionarMesa(listarMesas());
 
-        var total = mesa.calcularValorPagar();
+        var total = calcularValorPagarMesa(mesa);
         pedidoView.mostrarMensaje(String.format("La cuenta de mesa es: $ %,d.", total));
 
         var efectivo = pedidoView.leerEfectivo();
@@ -165,6 +176,7 @@ public void pagarCuentaMesa() {
 
             // Limpiar pedidos
             mesa.limpiarPedidos();
+            pedidoDao.eliminarPedidosDeMesa(mesa);
 
             // Retorno la devuelta
             pedidoView.mostrarMensaje(String.format("La devuelta es: $ %,d.", efectivo - total));
